@@ -63,7 +63,6 @@ export GROK_HOME="${GROK_OPENAI_HOME:-$HOME/.grok-openai}"
 exec "$HOME/.local/bin/grok" \
   -m gpt-5.5 \
   --no-memory \
-  --no-subagents \
   --disable-web-search \
   "$@"
 ```
@@ -131,6 +130,39 @@ Expected stdout:
 
 ```text
 direct-responses-ok
+```
+
+## Subagents
+
+Subagents are enabled in `config/grok-openai.config.toml`:
+
+```toml
+[subagents]
+enabled = true
+default_model = "gpt-5.5"
+```
+
+The wrapper does not pass `--no-subagents`, so parent and child sessions can use
+OpenAI `gpt-5.5`.
+
+Verified with a forced `explore` subagent:
+
+```bash
+grok-openai \
+  -p "Use the task tool exactly once to ask an explore subagent to answer with exactly the text subagent-openai-ok. Then return exactly what the subagent said." \
+  --verbatim \
+  --output-format streaming-json
+```
+
+Evidence from the saved session:
+
+```text
+tool: spawn_subagent
+subagent_type: explore
+subagent_id: 019e28d9-c3f6-7043-92de-655d90ddf96a
+parent model: gpt-5.5-2026-04-23
+child model: gpt-5.5-2026-04-23
+child output: subagent-openai-ok
 ```
 
 ## Files In This Repo
