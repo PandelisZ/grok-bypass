@@ -1,0 +1,43 @@
+[cli]
+installer = "internal"
+auto_update = true
+
+[models]
+default = "gpt-5.5"
+
+[subagents]
+enabled = false
+default_model = "gpt-5.5"
+
+[features]
+telemetry = false
+lsp_tools = false
+
+[memory]
+enabled = false
+
+[model."gpt-5.5"]
+model = "gpt-5.5"
+base_url = "https://api.openai.com/v1"
+name = "GPT-5.5 (OpenAI)"
+env_key = "OPENAI_API_KEY"
+api_backend = "responses"
+context_window = 1000000
+
+# Grok 0.1.210 may still make an internal fallback request under this model id.
+# This keeps that fallback pointed at OpenAI's Responses endpoint instead of the
+# xAI proxy. This binary version may still send "grok-build" as the request
+# model id for that internal call; see README.md.
+[model.grok-build]
+model = "gpt-5.5"
+base_url = "https://api.openai.com/v1"
+name = "GPT-5.5 (OpenAI fallback)"
+env_key = "OPENAI_API_KEY"
+api_backend = "responses"
+context_window = 1000000
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "gpt-5.5"
+yolo = false
+compact_mode = false

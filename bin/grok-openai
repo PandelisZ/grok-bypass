@@ -1,0 +1,8 @@
+#!/bin/sh
+export GROK_HOME="${GROK_OPENAI_HOME:-$HOME/.grok-openai}"
+exec "$HOME/.local/bin/grok" \
+  -m gpt-5.5 \
+  --no-memory \
+  --no-subagents \
+  --disable-web-search \
+  "$@"
