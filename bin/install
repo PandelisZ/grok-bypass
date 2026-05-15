@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+
+mkdir -p "$HOME/.grok-codex-bridge" "$HOME/.local/bin" "$HOME/.local/share/grok-codex-bridge"
+cp "$repo_root/config/grok-codex-bridge.config.toml" "$HOME/.grok-codex-bridge/config.toml"
+cp "$repo_root/bridge/"*.py "$HOME/.local/share/grok-codex-bridge/"
+cp "$repo_root/bin/codex-bridge" "$HOME/.local/bin/codex-bridge"
+cp "$repo_root/bin/grok-codex-bridge" "$HOME/.local/bin/grok-codex-bridge"
+chmod +x "$HOME/.local/share/grok-codex-bridge/codex_bridge.py" \
+  "$HOME/.local/bin/codex-bridge" \
+  "$HOME/.local/bin/grok-codex-bridge"
+
+echo "installed grok-codex-bridge"

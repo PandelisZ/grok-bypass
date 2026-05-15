@@ -176,6 +176,12 @@ tokens using the stored refresh token. Tokens are never printed by the bridge.
 Install the bridge helpers:
 
 ```bash
+bin/install
+```
+
+Or install manually:
+
+```bash
 mkdir -p ~/.grok-codex-bridge ~/.local/bin ~/.local/share/grok-codex-bridge
 cp config/grok-codex-bridge.config.toml ~/.grok-codex-bridge/config.toml
 cp bridge/*.py ~/.local/share/grok-codex-bridge/
@@ -236,6 +242,7 @@ Notes:
 ## Files In This Repo
 
 - `bin/grok-openai` - reusable launcher script.
+- `bin/install` - installer for the Codex OAuth bridge launcher/config files.
 - `bin/codex-bridge` - local HTTP bridge launcher.
 - `bin/grok-codex-bridge` - Grok launcher pointed at the local Codex bridge.
 - `config/grok-openai.config.toml` - OpenAI-only Grok home config template.
