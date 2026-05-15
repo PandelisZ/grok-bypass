@@ -165,9 +165,79 @@ child model: gpt-5.5-2026-04-23
 child output: subagent-openai-ok
 ```
 
+## Codex CLI Bridge
+
+`bridge/codex_bridge.py` is a tiny local OpenAI-compatible HTTP server backed by
+the official `codex exec` command. It does not read, copy, or replay Codex auth
+tokens; every inference request shells out to the local Codex CLI.
+
+Install the bridge helpers:
+
+```bash
+mkdir -p ~/.grok-codex-bridge ~/.local/bin ~/.local/share/grok-codex-bridge
+cp config/grok-codex-bridge.config.toml ~/.grok-codex-bridge/config.toml
+cp bridge/codex_bridge.py ~/.local/share/grok-codex-bridge/codex_bridge.py
+cp bin/codex-bridge ~/.local/bin/codex-bridge
+cp bin/grok-codex-bridge ~/.local/bin/grok-codex-bridge
+chmod +x ~/.local/share/grok-codex-bridge/codex_bridge.py \
+  ~/.local/bin/codex-bridge \
+  ~/.local/bin/grok-codex-bridge
+```
+
+Start the local bridge in one terminal:
+
+```bash
+codex-bridge --port 11435
+```
+
+Point Grok at it in another terminal:
+
+```bash
+grok-codex-bridge
+```
+
+Headless smoke test:
+
+```bash
+grok-codex-bridge \
+  -p "Reply exactly grok-codex-bridge-ok" \
+  --verbatim \
+  --output-format plain
+```
+
+Expected stdout:
+
+```text
+grok-codex-bridge-ok
+```
+
+Direct bridge checks:
+
+```bash
+curl -sS http://127.0.0.1:11435/v1/models | jq .
+
+curl -sS http://127.0.0.1:11435/v1/responses \
+  -H "Content-Type: application/json" \
+  -d '{"model":"codex-gpt-5.5","input":"Reply exactly bridge-ok"}' \
+  | jq -r '.output_text // .error.message // .'
+```
+
+Notes:
+
+- This is slow. Each model request starts a fresh `codex exec` process.
+- The bridge binds to `127.0.0.1` by default.
+- It implements the small subset Grok needs: `/v1/models`, `/v1/responses`,
+  and `/v1/chat/completions`.
+- `CODEX_BRIDGE_CODEX_MODEL` controls the underlying Codex model; default is
+  `gpt-5.5`.
+
 ## Files In This Repo
 
 - `bin/grok-openai` - reusable launcher script.
+- `bin/codex-bridge` - local HTTP bridge launcher.
+- `bin/grok-codex-bridge` - Grok launcher pointed at the local Codex bridge.
 - `config/grok-openai.config.toml` - OpenAI-only Grok home config template.
+- `config/grok-codex-bridge.config.toml` - Grok config template for the Codex bridge.
+- `bridge/codex_bridge.py` - OpenAI-compatible bridge backed by `codex exec`.
 - `custom-inference-provider.md` - detailed notes on Grok custom providers.
 - `grok-reverse-engineering-notes.md` - reverse-engineering notes and boundaries.

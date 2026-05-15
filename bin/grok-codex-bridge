@@ -1,0 +1,7 @@
+#!/bin/sh
+export GROK_HOME="${GROK_CODEX_BRIDGE_HOME:-$HOME/.grok-codex-bridge}"
+exec "$HOME/.local/bin/grok" \
+  -m codex-gpt-5.5 \
+  --no-memory \
+  --disable-web-search \
+  "$@"

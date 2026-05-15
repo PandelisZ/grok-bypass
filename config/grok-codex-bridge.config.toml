@@ -1,0 +1,28 @@
+[models]
+default = "codex-gpt-5.5"
+
+[subagents]
+enabled = true
+default_model = "codex-gpt-5.5"
+
+[features]
+telemetry = false
+lsp_tools = false
+
+[memory]
+enabled = false
+
+[model."codex-gpt-5.5"]
+model = "codex-gpt-5.5"
+base_url = "http://127.0.0.1:11435/v1"
+name = "Codex Bridge GPT-5.5"
+api_key = "local"
+api_backend = "responses"
+context_window = 1000000
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "codex-gpt-5.5"
+yolo = false
+compact_mode = false
+

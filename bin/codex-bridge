@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+repo_bridge="$script_dir/../bridge/codex_bridge.py"
+installed_bridge="${CODEX_BRIDGE_SCRIPT:-$HOME/.local/share/grok-codex-bridge/codex_bridge.py}"
+
+if [ -x "$repo_bridge" ]; then
+  exec "$repo_bridge" "$@"
+fi
+
+exec "$installed_bridge" "$@"
